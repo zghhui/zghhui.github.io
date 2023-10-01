@@ -22,7 +22,7 @@ baidu_site_verification  :  # get baidu_site_verification from https://ziyuan.ba
 # Site Author
 author:
   name             : "Zhang Guo Hui"
-  avatar           : "images/avator-512x512.jpg"
+  avatar           : "images/avator-512x512.png"
   bio              : "East China University of Science and Technology"
   location         : "ShangHai, China"
   employer         :
