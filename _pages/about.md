@@ -47,8 +47,7 @@ My research interest includes computer vision. I have published 0 papers at the 
 
 <!-- 荣誉和奖励 -->
 # 🎖 Honors and Awards
-- *2021.10* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
-- *2021.09* Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet. 
+- *2021.12* National Scholarship.
 
 <!-- 教育经历 -->
 # 📖 Educations
