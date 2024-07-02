@@ -66,8 +66,8 @@ My research interest includes Computer Vision and Deep Learning.
 
 <!-- - *2019.06 - 2022.04 (now)*, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet.  -->
 
-- *2018.09 - 2024.06 *, East China University of Science and Technology(ECUST).
-- *2024.09 - now *, University of Science and Technology of China(USTC).
+- *2018.09 - 2024.06*, East China University of Science and Technology(ECUST).
+- *2024.09 - now*, University of Science and Technology of China(USTC).
 
 <!-- 会谈 -->
 
