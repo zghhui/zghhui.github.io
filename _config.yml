@@ -6,7 +6,7 @@
 # `jekyll serve`. If you change this file, please restart the server process.
 
 # Site Settings
-title                    : "Zhang Guo Hui"
+title                    : "Guohui Zhang"
 description              : "Master"
 repository               : "zghhui/zghhui.github.io"
 google_scholar_stats_use_cdn : true
@@ -28,7 +28,7 @@ author:
   employer         :
   pubmed           : 
   googlescholar    : "https://scholar.google.com/citations?user=YOUR_GOOGLE_SCHOLAR_ID"
-  email            : "zghhui8110@163.com"
+  email            : "guohuizhang@mail.ustc.edu.cn"
   researchgate     :  # e.g., "https://www.researchgate.net/profile/yourprofile"
   uri              :
   bitbucket        :
