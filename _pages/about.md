@@ -18,9 +18,10 @@ redirect_from:
 
 <!-- 个人介绍 -->
 
-Hi, I'm Zhang GuoHui, now I am majoring in Computer Science and Technology at East China University of Science and Technology.
+<!-- Hi, I'm Zhang GuoHui, now I am majoring in Computer Science and Technology at East China University of Science and Technology. -->
+Hi👋, I'm Guohui Zhang, a Master student at the University of Science and Technology of China (USTC) advised by Prof. [Feng Zhao](https://scholar.google.com/citations?user=r6CvuOUAAAAJ&hl=zh-CN).
 
-My research interest includes Computer Vision and Deep Learning.
+My research interest includes Computer Vision and AIGC.
 
 <!-- I have published 0 papers at the top international AI conferences with total <a href='https://scholar.google.com/citations?user=DhtAFkwAAAAJ'>google scholar citations <strong><span id='total_cit'>0</span></strong></a> (You can also use google scholar badge <a href='https://scholar.google.com/citations?user=DhtAFkwAAAAJ'><img src="https://img.shields.io/endpoint?url={{ url | url_encode }}&logo=Google%20Scholar&labelColor=f6f6f6&color=9cf&style=flat&label=citations"></a>). -->
 
