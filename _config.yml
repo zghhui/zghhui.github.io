@@ -30,7 +30,7 @@ author:
   googlescholar    : #"https://scholar.google.com/citations?user=YOUR_GOOGLE_SCHOLAR_ID"
   email            : "guohuizhang@mail.ustc.edu.cn"
   researchgate     :  # e.g., "https://www.researchgate.net/profile/yourprofile"
-  uri              :
+  uri              : https://zghhui.me
   bitbucket        :
   codepen          :
   dribbble         :
@@ -57,7 +57,7 @@ author:
   xing             :
   youtube          :
   wikipedia        :
-  blog             : "https://zghhui.me"
+  # blog             : "https://zghhui.me"
 
 
 # Reading Files
