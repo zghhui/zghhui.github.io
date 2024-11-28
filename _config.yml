@@ -18,7 +18,7 @@ google_analytics_id      :  # get google_analytics_id from https://analytics.goo
 google_site_verification :  # get google_site_verification from https://search.google.com/search-console/about
 bing_site_verification   :  # get bing_site_verification from https://www.bing.com/webmasters/about
 baidu_site_verification  :  # get baidu_site_verification from https://ziyuan.baidu.com/login/index?u=/site/index
-blog_site_verification   :  "https://zghhui.me"
+# blog_site_verification   :  "https://zghhui.me"
 # Site Author
 author:
   name             : "Guohui Zhang"
@@ -57,6 +57,7 @@ author:
   xing             :
   youtube          :
   wikipedia        :
+  blog             : "https://zghhui.me"
 
 
 # Reading Files
