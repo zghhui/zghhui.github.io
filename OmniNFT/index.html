@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>OmniNFT: Modality-wise Diffusion Reinforcement for Joint Audio-Video Generation</title>
+  <meta name="description" content="OmniNFT: A modality-wise diffusion RL framework that resolves advantage conflicts in joint audio-video generation.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans&family=Noto+Sans&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" crossorigin="anonymous">
+
+  <!-- MathJax for equations -->
+  <script>
+    MathJax = { tex: { inlineMath: [['$','$'], ['\\(','\\)']] } };
+  </script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    body { font-family: 'Google Sans', 'Noto Sans', sans-serif; }
+    .publication-title { font-family: 'Google Sans', sans-serif; }
+    .publication-authors { font-family: 'Google Sans', sans-serif; }
+    .link-block a { margin-bottom: 6px; }
+    hr { border: none; border-top: 1px solid #dbdbdb; margin: 0; }
+
+    /* Video grid */
+    .video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .video-card { position: relative; border-radius: 8px; overflow: hidden; background: #000; }
+    .video-card video { width: 100%; display: block; border-radius: 8px; }
+
+    /* Results table */
+    .results-table { font-size: 0.82rem; margin-top: 1rem; }
+    .results-table th { font-size: 0.73rem; text-transform: uppercase; letter-spacing: 0.03em; background: #f5f5f5; white-space: nowrap; }
+    .results-table td { white-space: nowrap; }
+    .results-table tr.ours-row { background: #eef3ff; font-weight: 600; }
+    .results-table .best { color: #3273dc; font-weight: 700; }
+    .results-table .second { text-decoration: underline; }
+
+    /* Section content */
+    .section-content { font-size: 1.05rem; line-height: 1.75; }
+    .method-figure { margin: 1.5rem 0; }
+    .method-figure img { border-radius: 4px; }
+    .method-figure .fig-caption { font-size: 0.88rem; color: #666; margin-top: 0.5rem; }
+
+    /* BibTeX */
+    .bibtex-section pre { padding: 1rem; font-size: 0.82rem; border-radius: 6px; }
+
+    /* Title gradient */
+    .title-omni { background: linear-gradient(90deg, #5B8EC2, #6B9E5A); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 800; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .video-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- ============================================================ -->
+<!-- 1. TITLE / AUTHORS / BUTTONS                                  -->
+<!-- ============================================================ -->
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <br>
+          <h1 class="title is-2 publication-title">
+            <span class="title-omni">OmniNFT</span>: Modality-wise Diffusion Reinforcement for Joint Audio-Video Generation
+          </h1>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><a href="#">Guohui Zhang</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="#">Hang Xu</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="#">Yuming Li</a><sup>2</sup>,</span>
+            <span class="author-block"><a href="#">Siming Fu</a><sup>3</sup>,</span>
+            <span class="author-block"><a href="#">Zeyue Xue</a><sup>3</sup>,</span>
+            <span class="author-block"><a href="#">Jie Huang</a><sup>3</sup>,</span>
+            <span class="author-block"><a href="#">Hu Yu</a><sup>1</sup>,</span>
+            <br>
+            <span class="author-block"><a href="#">Lin Song</a><sup>3</sup>,</span>
+            <span class="author-block"><a href="#">Feng Zhao</a><sup>1&dagger;</sup></span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>University of Science and Technology of China,</span>
+            <span class="author-block"><sup>2</sup>Peking University,</span>
+            <span class="author-block"><sup>3</sup>JD Explore Academy</span>
+            <br>
+            <span class="author-block" style="font-size:0.85em;color:#888;"><sup>&dagger;</sup>Corresponding author</span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fas fa-file-pdf"></i></span>
+                  <span>Paper (ArXiv)</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="#" class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon"><i class="fab fa-github"></i></span>
+                  <span>Code</span>
+                </a>
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============================================================ -->
+<!-- 2. TEASER + ABSTRACT                                          -->
+<!-- ============================================================ -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body" id="abstract" style="padding-top: 0;">
+
+      <!-- Teaser image -->
+      <!-- <figure class="image" style="margin-bottom: 1.5rem;">
+        <img src="static/images/teaser.png" alt="OmniNFT teaser figure">
+      </figure>
+      <p class="has-text-centered" style="font-size:0.88rem; color:#666; margin-bottom:2rem;">
+        <strong>Left:</strong> OmniNFT consistently improves the base model with significant RL income across diverse scenarios (e.g., sports and games).
+        <strong>Right:</strong> LTX-2+OmniNFT (ours) consistently outperforms LTX-2 (baseline) across audio quality, visual quality, motion quality, cross-modal alignment, and audio-video synchronization.
+      </p> -->
+
+      <h2 class="title is-3 has-text-centered">Abstract</h2>
+      <div class="content has-text-justified section-content">
+        <p>
+          Reinforcement Learning (RL) offers a promising paradigm for aligning joint audio-video generation models with complex, multi-objective goals, yet its effective extension to this setting remains underexplored. We observe that mainstream dual-stream audio-visual models exhibit a distinct misalignment between video and audio rewards: directly aggregating all reward signals into a unified advantage often induces <em>advantage conflicts</em>, resulting in suboptimal optimization. To address this, we propose <strong>OmniNFT</strong>, a modality-wise diffusion RL framework that computes independent, normalized advantages for each reward and selectively routes them by modality — video- and audio-specific advantages are directed to their corresponding branches, while cross-modal synchronization advantages are broadcast to both. Extensive experiments on JavisBench with the LTX-2 backbone demonstrate that OmniNFT achieves comprehensive improvements in audio quality, visual quality, cross-modal alignment, and audio-visual synchronization over strong baselines.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<br><br>
+<hr>
+
+
+<!-- ============================================================ -->
+<!-- 4. MOTIVATION: ADVANTAGE CONFLICT                             -->
+<!-- ============================================================ -->
+<section class="section">
+  <div class="container is-max-desktop" id="motivation">
+    <h2 class="title is-3 has-text-centered">Motivation: Advantage Conflict</h2>
+    <div class="content has-text-justified section-content">
+      <p>
+        Mainstream audio-visual foundation models adopt a dual-stream architecture with cross-modal interaction. Directly aggregating all reward signals into a unified advantage (GRPO) and optimizing both branches simultaneously often leads to misalignment. We analyze 1,400 generated samples and find that <strong>nearly half exhibit advantage conflicts</strong> — where video and audio rewards point in opposite directions. This indicates that direct reward aggregation leads to advantage dilution, hindering effective optimization.
+      </p>
+      <div class="method-figure has-text-centered">
+        <figure class="image is-centered" style="max-width:450px; margin:auto;">
+          <img src="static/images/advantage_conflict.png" alt="Advantage conflict between audio and video modality">
+        </figure>
+        <p class="fig-caption has-text-centered">
+          <strong>Figure 1:</strong> Advantage conflict between audio and video modality. Nearly half of the samples show conflicting advantage directions.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<br><br>
+<hr>
+
+
+<!-- ============================================================ -->
+<!-- 5. CORE IDEA                                                  -->
+<!-- ============================================================ -->
+<section class="section">
+  <div class="container is-max-desktop" id="core-idea">
+    <h2 class="title is-3 has-text-centered">Core Idea</h2>
+    <div class="content has-text-justified section-content">
+      <p>
+        OmniNFT focuses on a simple but effective principle: <strong>separate reward credit by modality</strong>.
+        Instead of forcing audio and video branches to follow one mixed RL signal, we compute reward-wise normalized advantages and route them to the right branch.
+      </p>
+      <ul>
+        <li><strong>Video rewards</strong> only optimize the video branch.</li>
+        <li><strong>Audio rewards</strong> only optimize the audio branch.</li>
+        <li><strong>Sync rewards</strong> are shared by both branches to improve AV alignment.</li>
+      </ul>
+
+      <div class="method-figure">
+        <figure class="image is-centered">
+          <img src="static/images/framework.png" alt="OmniNFT core framework">
+        </figure>
+        <p class="fig-caption has-text-centered">
+          <strong>Figure 2:</strong> Core pipeline of OmniNFT.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<br><br>
+<hr>
+<!-- ============================================================ -->
+<!-- 3. DEMO VIDEOS                                                -->
+<!-- ============================================================ -->
+<section class="section">
+  <div class="container is-max-desktop" id="demos">
+    <h2 class="title is-3 has-text-centered">Generation Demos</h2>
+    <div class="content has-text-centered" style="margin-bottom: 1rem;">
+      <p style="font-size:0.95rem; color:#666;">
+        Side-by-side comparison: <strong style="color:#3273dc;">OmniNFT (Ours)</strong> vs. <strong>LTX-2 (Baseline)</strong>. Click to play with audio.
+      </p>
+    </div>
+
+    <!-- Group 1 -->
+    <div style="margin-bottom: 0.5rem;">
+      <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#3273dc;color:#fff;margin-bottom:6px;">LTX-2 + OmniNFT (Ours)</span>
+    </div>
+    <div class="video-grid">
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/OmniNFT/sample_0682.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/OmniNFT/sample_0683.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/OmniNFT/sample_0727.mp4" type="video/mp4"></video></div>
+    </div>
+    <div style="margin-bottom: 0.5rem; margin-top: 0.5rem;">
+      <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#e8e8e8;color:#363636;margin-bottom:6px;">LTX-2 (Baseline)</span>
+    </div>
+    <div class="video-grid">
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/ltx/sample_0682.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/ltx/sample_0683.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/ltx/sample_0727.mp4" type="video/mp4"></video></div>
+    </div>
+
+    <br>
+
+    <!-- Group 2 -->
+    <div style="margin-bottom: 0.5rem;">
+      <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#3273dc;color:#fff;margin-bottom:6px;">LTX-2 + OmniNFT (Ours)</span>
+    </div>
+    <div class="video-grid">
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/OmniNFT/sample_0022.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/OmniNFT/sample_0121.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/OmniNFT/sample_0551.mp4" type="video/mp4"></video></div>
+
+    </div>
+    <div style="margin-bottom: 0.5rem; margin-top: 0.5rem;">
+      <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#e8e8e8;color:#363636;margin-bottom:6px;">LTX-2 (Baseline)</span>
+    </div>
+    <div class="video-grid">
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/ltx/sample_0022.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/ltx/sample_0121.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/ltx/sample_0551.mp4" type="video/mp4"></video></div>
+    </div>
+    <br>
+
+    <!-- Group 3 -->
+  
+  <div style="margin-bottom: 0.5rem;">
+    <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#3273dc;color:#fff;margin-bottom:6px;">LTX-2 + OmniNFT (Ours)</span>
+  </div>
+  <div class="video-grid">
+    <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/OmniNFT/sample_0279.mp4" type="video/mp4"></video></div>
+    <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/OmniNFT/sample_0382.mp4" type="video/mp4"></video></div>
+    <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/OmniNFT/sample_0264.mp4" type="video/mp4"></video></div>
+
+  </div>
+  <div style="margin-bottom: 0.5rem; margin-top: 0.5rem;">
+    <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#e8e8e8;color:#363636;margin-bottom:6px;">LTX-2 (Baseline)</span>
+  </div>
+  <div class="video-grid">
+    <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/ltx/sample_0279.mp4" type="video/mp4"></video></div>
+    <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/ltx/sample_0382.mp4" type="video/mp4"></video></div>
+    <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/ltx/sample_0264.mp4" type="video/mp4"></video></div>
+
+  </div>
+</div>
+</section>
+
+
+<br>
+<hr>
+
+
+
+
+
+<br>
+<hr>
+
+
+<!-- Footer -->
+<footer class="footer" style="padding: 1.5rem;">
+  <div class="container" align="center">
+    <div class="column is-8">
+      <div class="content">
+        <p>
+         This website template is borrowed from <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
