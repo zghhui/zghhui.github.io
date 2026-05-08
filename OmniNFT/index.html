@@ -52,9 +52,17 @@
     /* Title gradient */
     .title-omni { background: linear-gradient(90deg, #5B8EC2, #6B9E5A); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 800; }
 
+    /* Prompt grid & collapsible */
+    .prompt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 0.5rem; }
+    .prompt-details { background: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 6px; padding: 0; font-size: 0.82rem; }
+    .prompt-details summary { cursor: pointer; padding: 6px 10px; font-weight: 600; color: #555; user-select: none; }
+    .prompt-details summary:hover { color: #3273dc; }
+    .prompt-details p { padding: 6px 10px 10px; margin: 0; color: #444; line-height: 1.5; }
+
     /* Responsive */
     @media (max-width: 768px) {
       .video-grid { grid-template-columns: repeat(2, 1fr); }
+      .prompt-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
@@ -71,19 +79,22 @@
         <div class="column has-text-centered">
           <br>
           <h1 class="title is-2 publication-title">
-            <span class="title-omni">OmniNFT</span>: Modality-wise Diffusion Reinforcement for Joint Audio-Video Generation
+            <span class="title-omni">OmniNFT</span>: Modality-wise Omni Diffusion Reinforcement for Joint Audio-Video Generation
           </h1>
 
           <div class="is-size-5 publication-authors">
             <span class="author-block"><a href="#">Guohui Zhang</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="#">XiaoXiao Ma</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="#">Jie Huang</a><sup>1</sup>,</span>
             <span class="author-block"><a href="#">Hang Xu</a><sup>1</sup>,</span>
-            <span class="author-block"><a href="#">Yuming Li</a><sup>2</sup>,</span>
-            <span class="author-block"><a href="#">Siming Fu</a><sup>3</sup>,</span>
-            <span class="author-block"><a href="#">Zeyue Xue</a><sup>3</sup>,</span>
-            <span class="author-block"><a href="#">Jie Huang</a><sup>3</sup>,</span>
             <span class="author-block"><a href="#">Hu Yu</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="#">Siming Fu</a><sup>3</sup>,</span>
+            <span class="author-block"><a href="#">Yuming Li</a><sup>2</sup>,</span>
+            <span class="author-block"><a href="#">Zeyue Xue</a><sup>3</sup>,</span>          
             <br>
-            <span class="author-block"><a href="#">Lin Song</a><sup>3</sup>,</span>
+            <span class="author-block"><a href="#">Lin Song</a><sup>3&Dagger;</sup>,</span>
+            <span class="author-block"><a href="#">Haoyang Huang</a><sup>3</sup>,</span>
+            <span class="author-block"><a href="#">Nan Duan</a><sup>3</sup>,</span>
             <span class="author-block"><a href="#">Feng Zhao</a><sup>1&dagger;</sup></span>
           </div>
 
@@ -92,7 +103,7 @@
             <span class="author-block"><sup>2</sup>Peking University,</span>
             <span class="author-block"><sup>3</sup>JD Explore Academy</span>
             <br>
-            <span class="author-block" style="font-size:0.85em;color:#888;"><sup>&dagger;</sup>Corresponding author</span>
+            <span class="author-block" style="font-size:0.85em;color:#888;"><sup>&Dagger;</sup>Project leader, <sup>&dagger;</sup>Corresponding author</span>
           </div>
 
           <div class="column has-text-centered">
@@ -138,7 +149,10 @@
       <h2 class="title is-3 has-text-centered">Abstract</h2>
       <div class="content has-text-justified section-content">
         <p>
-          Reinforcement Learning (RL) offers a promising paradigm for aligning joint audio-video generation models with complex, multi-objective goals, yet its effective extension to this setting remains underexplored. We observe that mainstream dual-stream audio-visual models exhibit a distinct misalignment between video and audio rewards: directly aggregating all reward signals into a unified advantage often induces <em>advantage conflicts</em>, resulting in suboptimal optimization. To address this, we propose <strong>OmniNFT</strong>, a modality-wise diffusion RL framework that computes independent, normalized advantages for each reward and selectively routes them by modality — video- and audio-specific advantages are directed to their corresponding branches, while cross-modal synchronization advantages are broadcast to both. Extensive experiments on JavisBench with the LTX-2 backbone demonstrate that OmniNFT achieves comprehensive improvements in audio quality, visual quality, cross-modal alignment, and audio-visual synchronization over strong baselines.
+          Recent advances in joint audio-video generation have been remarkable, yet real-world applications demand strong per-modality fidelity, cross-modal alignment, and fine-grained synchronization. Reinforcement Learning (RL) offers a promising paradigm, but its extension to <em>multi-objective</em> and <em>multi-modal</em> joint audio-video generation remains unexplored. Notably, our in-depth analysis first reveals that the primary obstacles to applying RL in this stem from: <strong>(i)</strong> multi-objective advantages inconsistency, where the advantages of multimodal outputs are not always consistent within a group; <strong>(ii)</strong> multi-modal gradients imbalance, where video-branch gradients leak into shallow audio layers responsible for intra-modal generation; <strong>(iii)</strong> uniform credit assignment, where fine-grained cross-modal alignment regions fail to get efficient exploration. These shortcomings suggest that vanilla RL fine-tuning strategy with a single global advantage often leads to suboptimal results.
+        </p>
+        <p>
+          To address these challenges, we propose <strong>OmniNFT</strong>, a novel modality-aware online diffusion RL framework with three key innovations: <strong>(1)</strong> Modality-wise advantage routing, which routes independent per-reward advantages to their respective modality generation branches. <strong>(2)</strong> Layer-wise gradient surgery, which selectively detaches video-branch gradients on shallow audio layers while retaining those for cross-modal interaction layers. <strong>(3)</strong> Region-wise loss reweighting, which modulates policy optimization toward critical regions related to audio-video synchronization and fine-grained alignment. Extensive experiments on JavisBench and VBench with the LTX-2 backbone demonstrate that OmniNFT delivers consistent and comprehensive improvements over strong baselines in audio and video perceptual quality, cross-modal alignment, and audio-video synchronization.
         </p>
       </div>
     </div>
@@ -146,13 +160,10 @@
 </section>
 
 
-<br><br>
+<!-- <br><br>
 <hr>
 
 
-<!-- ============================================================ -->
-<!-- 4. MOTIVATION: ADVANTAGE CONFLICT                             -->
-<!-- ============================================================ -->
 <section class="section">
   <div class="container is-max-desktop" id="motivation">
     <h2 class="title is-3 has-text-centered">Motivation: Advantage Conflict</h2>
@@ -170,7 +181,7 @@
       </div>
     </div>
   </div>
-</section>
+</section> -->
 
 
 <br><br>
@@ -185,13 +196,12 @@
     <h2 class="title is-3 has-text-centered">Core Idea</h2>
     <div class="content has-text-justified section-content">
       <p>
-        OmniNFT focuses on a simple but effective principle: <strong>separate reward credit by modality</strong>.
-        Instead of forcing audio and video branches to follow one mixed RL signal, we compute reward-wise normalized advantages and route them to the right branch.
+        OmniNFT performs <strong>fine-grained credit assignment at three levels</strong> to overcome the limitations of vanilla RL fine-tuning with a single global advantage:
       </p>
       <ul>
-        <li><strong>Video rewards</strong> only optimize the video branch.</li>
-        <li><strong>Audio rewards</strong> only optimize the audio branch.</li>
-        <li><strong>Sync rewards</strong> are shared by both branches to improve AV alignment.</li>
+        <li><strong>Modality-wise Advantage Routing:</strong> Instead of collapsing all rewards into one scalar, OmniNFT computes independent per-reward advantages and routes them to their respective modality branches — video rewards optimize the video branch, audio rewards optimize the audio branch, and synchronization rewards are broadcast to both.</li>
+        <li><strong>Layer-wise Gradient Surgery:</strong> We selectively detach video-branch gradients on shallow audio layers (responsible for intra-modal generation) while retaining full gradient flow through deep cross-modal interaction layers, preventing gradient leakage from disrupting audio generation.</li>
+        <li><strong>Region-wise Loss Reweighting:</strong> Leveraging V2A cross-attention maps as an intrinsic proxy for sound-emitting regions, we modulate the RL loss to concentrate optimization on critical regions related to audio-video synchronization and fine-grained alignment.</li>
       </ul>
 
       <div class="method-figure">
@@ -220,66 +230,200 @@
       </p>
     </div>
 
-    <!-- Group 1 -->
+    <!-- Paper Cases (1-5) -->
+    <h3 class="title is-5" style="margin-bottom: 1rem;">Paper Cases</h3>
+
     <div style="margin-bottom: 0.5rem;">
       <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#3273dc;color:#fff;margin-bottom:6px;">LTX-2 + OmniNFT (Ours)</span>
     </div>
     <div class="video-grid">
-      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/OmniNFT/sample_0682.mp4" type="video/mp4"></video></div>
-      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/OmniNFT/sample_0683.mp4" type="video/mp4"></video></div>
-      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/OmniNFT/sample_0727.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/paper/OmniNFT/case_001.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/paper/OmniNFT/case_002.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/paper/OmniNFT/case_003.mp4" type="video/mp4"></video></div>
     </div>
     <div style="margin-bottom: 0.5rem; margin-top: 0.5rem;">
       <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#e8e8e8;color:#363636;margin-bottom:6px;">LTX-2 (Baseline)</span>
     </div>
     <div class="video-grid">
-      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/ltx/sample_0682.mp4" type="video/mp4"></video></div>
-      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/ltx/sample_0683.mp4" type="video/mp4"></video></div>
-      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/ltx/sample_0727.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/paper/Ltx-2/case_001.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/paper/Ltx-2/case_002.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/paper/Ltx-2/case_003.mp4" type="video/mp4"></video></div>
+    </div>
+    <div class="prompt-grid">
+      <details class="prompt-details"><summary>Prompt</summary><p>In a medium close-up, a young woman with blonde shoulder-length hair stands in a lavender field under a twilight sky. She says, "告诉我这条光滑的绿色带子见证了多少年的沉重。" The audio features gentle, atmospheric singing establishing a calm and wistful mood.</p></details>
+      <details class="prompt-details"><summary>Prompt</summary><p>A white rooster with a bright red comb stands on a weathered wooden beam. The brown chicken takes a few steps forward. The white rooster lifts its head and lets out a crow. The audio shows rural morning sounds with a rooster's sharp crow and softer clucking.</p></details>
+      <details class="prompt-details"><summary>Prompt</summary><p>Two men face each other nose-to-nose in a tense confrontation within a dimly lit bank. The older man says, "我们才不会害怕残忍的流氓." The clown replies, "你知道吗？你让我想起了我的父亲，我恨我的父亲." The audio shows suffocating silence broken by tense dialogue.</p></details>
     </div>
 
     <br>
 
-    <!-- Group 2 -->
     <div style="margin-bottom: 0.5rem;">
       <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#3273dc;color:#fff;margin-bottom:6px;">LTX-2 + OmniNFT (Ours)</span>
     </div>
     <div class="video-grid">
-      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/OmniNFT/sample_0022.mp4" type="video/mp4"></video></div>
-      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/OmniNFT/sample_0121.mp4" type="video/mp4"></video></div>
-      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/OmniNFT/sample_0551.mp4" type="video/mp4"></video></div>
-
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/paper/OmniNFT/case_004.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/paper/OmniNFT/case_005.mp4" type="video/mp4"></video></div>
     </div>
     <div style="margin-bottom: 0.5rem; margin-top: 0.5rem;">
       <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#e8e8e8;color:#363636;margin-bottom:6px;">LTX-2 (Baseline)</span>
     </div>
     <div class="video-grid">
-      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/ltx/sample_0022.mp4" type="video/mp4"></video></div>
-      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/ltx/sample_0121.mp4" type="video/mp4"></video></div>
-      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/ltx/sample_0551.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/paper/Ltx-2/case_004.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/paper/Ltx-2/case_005.mp4" type="video/mp4"></video></div>
     </div>
+    <div class="prompt-grid">
+      <details class="prompt-details"><summary>Prompt</summary><p>SpongeBob and Patrick sit on a rock underwater. Patrick says: "Knowledge cannot replace friendship, SpongeBob!" SpongeBob responds: "I agree, but I also really want that Krabby Patty!" Cinematic 2D animation, soft underwater lighting, 8k resolution.</p></details>
+      <details class="prompt-details"><summary>Prompt</summary><p>A professional basketball game in a brightly lit arena. Player number 30 dribbles up court, executes a crossover and fake, then leaps and shoots. The ball passes cleanly through the net. The crowd roars as the scoreboard updates. Audio: dribbling, shoe squeaks, "swish", and crowd cheering.</p></details>
+    </div>
+
+    <br>
+    <hr>
     <br>
 
-    <!-- Group 3 -->
-  
-  <div style="margin-bottom: 0.5rem;">
-    <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#3273dc;color:#fff;margin-bottom:6px;">LTX-2 + OmniNFT (Ours)</span>
-  </div>
-  <div class="video-grid">
-    <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/OmniNFT/sample_0279.mp4" type="video/mp4"></video></div>
-    <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/OmniNFT/sample_0382.mp4" type="video/mp4"></video></div>
-    <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/OmniNFT/sample_0264.mp4" type="video/mp4"></video></div>
+    <!-- More Cases -->
+    <h3 class="title is-5" style="margin-bottom: 1rem;">More Cases</h3>
 
-  </div>
-  <div style="margin-bottom: 0.5rem; margin-top: 0.5rem;">
-    <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#e8e8e8;color:#363636;margin-bottom:6px;">LTX-2 (Baseline)</span>
-  </div>
-  <div class="video-grid">
-    <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/ltx/sample_0279.mp4" type="video/mp4"></video></div>
-    <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/ltx/sample_0382.mp4" type="video/mp4"></video></div>
-    <div class="video-card"><video controls playsinline preload="metadata"><source src="static/videos/ltx/sample_0264.mp4" type="video/mp4"></video></div>
+    <div style="margin-bottom: 0.5rem;">
+      <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#3273dc;color:#fff;margin-bottom:6px;">LTX-2 + OmniNFT (Ours)</span>
+    </div>
+    <div class="video-grid">
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/OmniNFT/case_002.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/OmniNFT/case_004.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/OmniNFT/case_005.mp4" type="video/mp4"></video></div>
+    </div>
+    <div style="margin-bottom: 0.5rem; margin-top: 0.5rem;">
+      <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#e8e8e8;color:#363636;margin-bottom:6px;">LTX-2 (Baseline)</span>
+    </div>
+    <div class="video-grid">
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/Ltx/case_002.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/Ltx/case_004.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/Ltx/case_005.mp4" type="video/mp4"></video></div>
+    </div>
+    <div class="prompt-grid">
+      <details class="prompt-details"><summary>Prompt</summary><p>A monk in orange robes kneels beside a man on a thin mat. The monk intones, "Beings who have not yet obtained liberation have unfixed natures and consciousnesses. Their bad habits reap karma; their good habits bring rewards." Soft, serene ambient soundscape creating a meditative atmosphere.</p></details>
+      <details class="prompt-details"><summary>Prompt</summary><p>A young woman with long black hair in a wooden boat drifting on calm water surrounded by misty hills. She murmurs, "The orioles are singing on the island in the river. A beautiful lady is the ideal match for the gentleman." Audio: gentle water ripples and distant birdsong.</p></details>
+      <details class="prompt-details"><summary>Prompt</summary><p>A woman with short brown hair in a gray wool coat holds a vintage camera outdoors. She says, "Photography isn't merely capturing moments—it's about seeing beyond surfaces, finding stories hidden within everyday life. Each click tells its own tale." Audio: gentle wind and distant city ambience.</p></details>
+    </div>
 
-  </div>
+    <br>
+
+    <div style="margin-bottom: 0.5rem;">
+      <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#3273dc;color:#fff;margin-bottom:6px;">LTX-2 + OmniNFT (Ours)</span>
+    </div>
+    <div class="video-grid">
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/OmniNFT/case_006.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/OmniNFT/case_007.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/OmniNFT/case_008.mp4" type="video/mp4"></video></div>
+    </div>
+    <div style="margin-bottom: 0.5rem; margin-top: 0.5rem;">
+      <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#e8e8e8;color:#363636;margin-bottom:6px;">LTX-2 (Baseline)</span>
+    </div>
+    <div class="video-grid">
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/Ltx/case_006.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/Ltx/case_007.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/Ltx/case_008.mp4" type="video/mp4"></video></div>
+    </div>
+    <div class="prompt-grid">
+      <details class="prompt-details"><summary>Prompt</summary><p>An astronaut in a full white EMU spacesuit drifts weightlessly above Earth's cloud formations. The astronaut says, "我现在感觉很好。我们的星球是如此美丽。" Audio: soft clicks of a lighter, faint drag from smoking, and a quiet sigh.</p></details>
+      <details class="prompt-details"><summary>Prompt</summary><p>A small anthropomorphic rodent-like creature with large ears dashes along an autumn forest path. It calls out, "Hedra has brought us to life with the most advanced character." Audio: a single line of clear dialogue with no background sounds.</p></details>
+      <details class="prompt-details"><summary>Prompt</summary><p>A male anime character with spiky black hair in ornate armor stands in an outdoor arena under a turbulent sky with lightning. He declares, "You think you've seen pain? You think you know suffering? Try beat it." Audio: rolling thunder with deep, resonant voice.</p></details>
+    </div>
+
+    <br>
+
+    <div style="margin-bottom: 0.5rem;">
+      <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#3273dc;color:#fff;margin-bottom:6px;">LTX-2 + OmniNFT (Ours)</span>
+    </div>
+    <div class="video-grid">
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/OmniNFT/case_009.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/OmniNFT/case_011.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/OmniNFT/case_012.mp4" type="video/mp4"></video></div>
+    </div>
+    <div style="margin-bottom: 0.5rem; margin-top: 0.5rem;">
+      <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#e8e8e8;color:#363636;margin-bottom:6px;">LTX-2 (Baseline)</span>
+    </div>
+    <div class="video-grid">
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/Ltx/case_009.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/Ltx/case_011.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/Ltx/case_012.mp4" type="video/mp4"></video></div>
+    </div>
+    <div class="prompt-grid">
+      <details class="prompt-details"><summary>Prompt</summary><p>Extreme close-up of a tabby cat's face. The cat's mouth opens slightly as if meowing, head shifting gently from side to side. Audio: soft and persistent cat mews repeating gently against a quiet background.</p></details>
+      <details class="prompt-details"><summary>Prompt</summary><p>Extreme close-up of a cicada clinging to a warm orange-red wall, its patterned wings spread in sharp detail. Audio: continuous, steady cicada chirps with a clear, high-pitched, rhythmic buzzing quality.</p></details>
+      <details class="prompt-details"><summary>Prompt</summary><p>A person in a beige hooded garment steps out of a white SUV in a forest clearing. Heavy rain begins to pour as they walk toward the tree line past a moss-covered rock near a stream. Audio: dense patter of heavy rain and steady rush of stream water.</p></details>
+    </div>
+
+    <br>
+
+    <div style="margin-bottom: 0.5rem;">
+      <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#3273dc;color:#fff;margin-bottom:6px;">LTX-2 + OmniNFT (Ours)</span>
+    </div>
+    <div class="video-grid">
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/OmniNFT/case_013.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/OmniNFT/case_014.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/OmniNFT/case_016.mp4" type="video/mp4"></video></div>
+    </div>
+    <div style="margin-bottom: 0.5rem; margin-top: 0.5rem;">
+      <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#e8e8e8;color:#363636;margin-bottom:6px;">LTX-2 (Baseline)</span>
+    </div>
+    <div class="video-grid">
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/Ltx/case_013.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/Ltx/case_014.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/Ltx/case_016.mp4" type="video/mp4"></video></div>
+    </div>
+    <div class="prompt-grid">
+      <details class="prompt-details"><summary>Prompt</summary><p>High-angle extreme close-up of two hands with manicured nails pressing round, matte gray keys of a mint-green retro keyboard. Fingers move briskly with practiced rhythm. Audio: soft, steady keyboard typing with distinct, crisp clicks in a continuous pattern.</p></details>
+      <details class="prompt-details"><summary>Prompt</summary><p>A man in a dark sweater and fingerless gloves glides on a longboard down a paved road through a rugged mountain landscape. He shifts weight in fluid motions, accelerating. Audio: sharp, rushing wind sound that grows in intensity with increasing speed.</p></details>
+      <details class="prompt-details"><summary>Prompt</summary><p>In a hazy, rain-soaked city street, a rider on a motorcycle moves forward. The camera pushes in, descends to track the rear wheel displacing water, then rises and circles the motorcycle, revealing towering buildings disappearing into thick mist.</p></details>
+    </div>
+
+    <br>
+
+    <div style="margin-bottom: 0.5rem;">
+      <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#3273dc;color:#fff;margin-bottom:6px;">LTX-2 + OmniNFT (Ours)</span>
+    </div>
+    <div class="video-grid">
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/OmniNFT/case_017.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/OmniNFT/case_018.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/OmniNFT/case_019.mp4" type="video/mp4"></video></div>
+    </div>
+    <div style="margin-bottom: 0.5rem; margin-top: 0.5rem;">
+      <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#e8e8e8;color:#363636;margin-bottom:6px;">LTX-2 (Baseline)</span>
+    </div>
+    <div class="video-grid">
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/Ltx/case_017.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/Ltx/case_018.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/Ltx/case_019.mp4" type="video/mp4"></video></div>
+    </div>
+    <div class="prompt-grid">
+      <details class="prompt-details"><summary>Prompt</summary><p>A tranquil seascape with a small boat, dark rock formations, and a crescent moon. Text: "DJI MAVIC 4 PRO, 28mm 哈苏相机". The camera zooms in, pans across the sunset-streaked sky, then circles and ascends to a bird's-eye view of the vast sea.</p></details>
+      <details class="prompt-details"><summary>Prompt</summary><p>A female anime character with white hair streaked with blue holds a dark flask emitting cool blue glow in a dim library. She lowers her head with determination, waves her hand causing the glow to expand, then strides into shadows. Audio: delicate melody with whispers of wind and turning pages.</p></details>
+      <details class="prompt-details"><summary>Prompt</summary><p>In a dense, misty forest, a character with braided hair crouches beside a glowing blue object with game UI overlays. She rises, moves stealthily, unleashes a lightning bolt at a mechanical beast, and a teammate ambushes from the opposite side. Audio: forest ambience interrupted by energy crackling and metallic screeches.</p></details>
+    </div>
+
+    <br>
+
+    <div style="margin-bottom: 0.5rem;">
+      <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#3273dc;color:#fff;margin-bottom:6px;">LTX-2 + OmniNFT (Ours)</span>
+    </div>
+    <div class="video-grid">
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/OmniNFT/case_020.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/OmniNFT/case_021.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/OmniNFT/case_022.mp4" type="video/mp4"></video></div>
+    </div>
+    <div style="margin-bottom: 0.5rem; margin-top: 0.5rem;">
+      <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:2px 10px;border-radius:4px;background:#e8e8e8;color:#363636;margin-bottom:6px;">LTX-2 (Baseline)</span>
+    </div>
+    <div class="video-grid">
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/Ltx/case_020.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/Ltx/case_021.mp4" type="video/mp4"></video></div>
+      <div class="video-card"><video controls playsinline preload="metadata"><source src="static/video/more_case/Ltx/case_022.mp4" type="video/mp4"></video></div>
+    </div>
+    <div class="prompt-grid">
+      <details class="prompt-details"><summary>Prompt</summary><p>Five superhero figures stand amidst twisted metal and rubble under golden backlighting. The man in red-and-gold says, "I can't shake the feeling that this isn't over yet." The muscular man replies, "As long as we're still standing together, we can get through anything." Audio: soft wind through ruins.</p></details>
+      <details class="prompt-details"><summary>Prompt</summary><p>An East Asian man on a rooftop says, "事情到这个地步,你还有退路吗?" The second man replies with quiet confidence, "退路?你觉得我会需要吗?" The coastal city skyline and sea blur behind them. Audio: quiet open-air ambiance with clear, tense dialogue.</p></details>
+      <details class="prompt-details"><summary>Prompt</summary><p>In a hazy encampment, a man in dark robes grips a weapon beside a yellow banner with '安'. He speaks firmly: "那是我至亲至爱的师弟，得加钱。" An armored man on horseback responds: "好，你开个价吧。" Audio: steady flapping of banners with a low musical undertone.</p></details>
+    </div>
 </div>
 </section>
 
