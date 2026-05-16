@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手撕算法练习平台</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.css">
+</head>
+<body>
+    <div id="app">
+        <!-- 顶部导航 -->
+        <header class="top-bar">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">手撕算法</span>
+            </div>
+            <nav class="nav-tabs">
+                <button class="nav-btn active" data-view="practice">练习模式</button>
+                <button class="nav-btn" data-view="review">复习笔记</button>
+                <button class="nav-btn" data-view="progress">进度统计</button>
+            </nav>
+            <div class="top-actions">
+                <div class="timer" id="timer">00:00</div>
+                <button class="btn-icon" id="openApiConfig" title="API 配置">⚙️</button>
+                <button class="btn-icon" id="toggleTheme" title="切换主题">🌙</button>
+            </div>
+        </header>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 左侧: 题目列表 -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h3>题目列表</h3>
+                    <div class="filter-bar">
+                        <select id="categoryFilter">
+                            <option value="all">全部分类</option>
+                            <option value="attention">注意力机制</option>
+                            <option value="transformer">Transformer</option>
+                            <option value="flow">Flow Matching</option>
+                            <option value="kl">KL散度</option>
+                            <option value="norm">归一化层</option>
+                            <option value="grpo">GRPO</option>
+                            <option value="rope">位置编码</option>
+                            <option value="flow-grpo">Flow-GRPO</option>
+                            <option value="diffusion-nft">DiffusionNFT</option>
+                            <option value="mmdit">MMDiT</option>
+                            <option value="dpo">DPO</option>
+                            <option value="moe">MoE</option>
+                            <option value="decoding">解码策略</option>
+                            <option value="gqa">GQA/MQA</option>
+                        </select>
+                        <select id="difficultyFilter">
+                            <option value="all">全部难度</option>
+                            <option value="easy">⭐ 基础</option>
+                            <option value="medium">⭐⭐ 中等</option>
+                            <option value="hard">⭐⭐⭐ 困难</option>
+                        </select>
+                    </div>
+                </div>
+                <ul class="problem-list" id="problemList"></ul>
+            </aside>
+
+            <!-- 中间: 题目描述 + 代码编辑器 -->
+            <section class="workspace">
+                <!-- 题目描述面板 -->
+                <div class="problem-panel" id="problemPanel">
+                    <div class="panel-header">
+                        <div class="problem-title-area">
+                            <h2 id="problemTitle">选择一道题目开始</h2>
+                            <div class="problem-tags" id="problemTags"></div>
+                        </div>
+                        <div class="panel-actions">
+                            <button class="btn-sm" id="toggleDescription" title="收起/展开题目">📋</button>
+                            <button class="btn-sm" id="showHint" title="提示">💡</button>
+                            <button class="btn-sm" id="showReference" title="参考答案">📖</button>
+                        </div>
+                    </div>
+                    <div class="problem-body" id="problemBody">
+                        <div class="welcome-msg">
+                            <h3>👋 欢迎来到手撕算法练习平台</h3>
+                            <p>从左侧选择一道题目，在编辑器中手写实现，然后让 AI 帮你检查！</p>
+                            <div class="quick-start">
+                                <h4>📌 包含以下经典算法：</h4>
+                                <ul>
+                                    <li>多头注意力 (Multi-Head Attention)</li>
+                                    <li>Transformer Encoder/Decoder</li>
+                                    <li>Flow Matching 训练与采样</li>
+                                    <li>KL 散度计算</li>
+                                    <li>归一化层 (RMSNorm / LayerNorm / BatchNorm)</li>
+                                    <li>GRPO 手撕</li>
+                                    <li>旋转位置编码 (RoPE)</li>
+                                    <li>Flow-GRPO 手撕</li>
+                                    <li>DiffusionNFT 手撕</li>
+                                    <li>MMDiT 手撕</li>
+                                    <li>DPO 损失 (Direct Preference Optimization)</li>
+                                    <li>Mixture of Experts (MoE) 路由</li>
+                                    <li>Beam Search 解码</li>
+                                    <li>GQA / MQA (Grouped-Query Attention)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 代码编辑器 -->
+                <div class="editor-panel">
+                    <div class="editor-toolbar">
+                        <div class="toolbar-left">
+                            <span class="file-tab active">solution.py</span>
+                        </div>
+                        <div class="toolbar-right">
+                            <button class="btn-tool" id="resetCode" title="重置代码">🔄 重置</button>
+                            <button class="btn-tool" id="formatCode" title="格式化">✨ 格式化</button>
+                            <button class="btn-tool primary" id="submitCode" title="提交检查">
+                                🚀 提交检查
+                            </button>
+                        </div>
+                    </div>
+                    <div id="codeEditor"></div>
+                </div>
+            </section>
+
+            <!-- 右侧: AI 评审结果 (可折叠) -->
+            <aside class="review-panel" id="reviewPanel">
+                <div class="review-tab" id="reviewTab" title="展开/收起 AI 评审">
+                    <span class="review-tab-icon">🤖</span>
+                    <span class="review-tab-label">AI 评审</span>
+                </div>
+                <div class="review-inner">
+                    <div class="review-header">
+                        <h3>🤖 AI 评审</h3>
+                        <div class="review-header-actions">
+                            <button class="btn-sm" id="clearReview" title="清空">🗑️</button>
+                            <button class="btn-sm" id="collapseReview" title="收起">✕</button>
+                        </div>
+                    </div>
+                    <div class="review-body" id="reviewBody">
+                        <div class="review-placeholder">
+                            <div class="placeholder-icon">🔍</div>
+                            <p>提交代码后，AI 将会对你的实现进行评审</p>
+                            <div class="review-features">
+                                <div class="feature">
+                                    <span>✅</span> 正确性检查
+                                </div>
+                                <div class="feature">
+                                    <span>📐</span> 维度/形状验证
+                                </div>
+                                <div class="feature">
+                                    <span>💡</span> 改进建议
+                                </div>
+                                <div class="feature">
+                                    <span>📊</span> 评分打分
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- API 配置面板 -->
+        <div class="config-overlay" id="configOverlay">
+            <div class="config-panel">
+                <div class="config-header">
+                    <h3>API 配置</h3>
+                    <button class="modal-close" id="configClose">&times;</button>
+                </div>
+                <div class="config-body">
+                    <div class="config-section">
+                        <label class="config-label">服务商</label>
+                        <div class="provider-tabs">
+                            <button class="provider-btn active" data-provider="siliconflow">SiliconFlow</button>
+                            <button class="provider-btn" data-provider="jdcloud">JDCloud Gemini</button>
+                        </div>
+                    </div>
+
+                    <div class="config-section">
+                        <label class="config-label">API Base URL</label>
+                        <input type="text" class="config-input" id="cfgBaseUrl" placeholder="https://api.siliconflow.cn/v1/chat/completions">
+                    </div>
+
+                    <div class="config-section">
+                        <label class="config-label">API Key</label>
+                        <div class="input-with-toggle">
+                            <input type="password" class="config-input" id="cfgApiKey" placeholder="Bearer token (不含 Bearer 前缀)">
+                            <button class="btn-eye" id="toggleKeyVisibility">👁</button>
+                        </div>
+                    </div>
+
+                    <div class="config-section">
+                        <label class="config-label">模型名称</label>
+                        <input type="text" class="config-input" id="cfgModel" placeholder="Pro/zai-org/GLM-4.7">
+                    </div>
+
+                    <div class="config-actions">
+                        <button class="btn-tool" id="cfgTest">🔗 测试连接</button>
+                        <button class="btn-tool primary" id="cfgSave">💾 保存配置</button>
+                    </div>
+                    <div class="config-status" id="cfgStatus"></div>
+
+                    <div class="config-presets">
+                        <label class="config-label">快速预设</label>
+                        <div class="preset-list">
+                            <button class="preset-btn" data-preset="siliconflow-glm">SiliconFlow / GLM-4.7</button>
+                            <button class="preset-btn" data-preset="siliconflow-qwen">SiliconFlow / Qwen3-8B</button>
+                            <button class="preset-btn" data-preset="jdcloud-gemini">JDCloud / Gemini 3-Pro</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 提示弹窗 -->
+        <div class="modal-overlay" id="modalOverlay">
+            <div class="modal" id="modal">
+                <div class="modal-header">
+                    <h3 id="modalTitle"></h3>
+                    <button class="modal-close" id="modalClose">&times;</button>
+                </div>
+                <div class="modal-body" id="modalBody"></div>
+            </div>
+        </div>
+
+        <!-- 加载动画 -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p>AI 正在评审你的代码...</p>
+                <p class="loading-sub">这可能需要几秒钟</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/comment/comment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/selection/active-line.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/9.1.6/marked.min.js"></script>
+    <script src="problems.js"></script>
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
